@@ -1,6 +1,7 @@
 package tui
 
 import (
+	"github.com/Mth-Ryan/lspcli/config"
 	"github.com/Mth-Ryan/lspcli/core"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -16,7 +17,7 @@ type model struct {
 }
 
 func InitTuiModel() model {
-	recipes, err := core.LoadAndParseRecipes("runtime/recipes.yml")
+	recipes, err := core.LoadAndParseRecipes(config.Get().RecipesFilePath)
 	if err != nil {
 		panic(err)
 	}

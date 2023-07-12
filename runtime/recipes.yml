@@ -1,16 +1,14 @@
-- lsp: "gopls"
-  lang: "Golang"
-  provider: "golang"
-  ref: "golang.org/x/tools/gopls"
-
-- lsp: "typescript-language-server"
-  lang: "Javascript/Typescript"
-  provider: "npm"
-  ref: "typescript-language-server typescript"
-
-- lsp: "OmniSharp"
-  lang: "C#"
-  provider: "github/release"
-  ref: "OmniSharp/omnisharp-roslyn"
-  extraSteps:
-    - "ln -sf {.lsp}/OmniSharp {.bin}/OmniSharp"
+- lang: C#
+  lsp: OmniSharp
+  provider: github/release
+  ref: OmniSharp/omnisharp-roslyn
+  steps:
+  - ln -sf {.lsp}/OmniSharp {.bin}/OmniSharp
+- lang: Golang
+  lsp: gopls
+  provider: golang
+  ref: golang.org/x/tools/gopls
+- lang: Javascript/Typescript
+  lsp: typescript-language-server
+  provider: npm
+  ref: typescript-language-server typescript
