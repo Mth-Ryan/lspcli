@@ -1,0 +1,24 @@
+#! /usr/bin/env python3
+
+import sys
+import yaml
+
+def loadAndParse(path: str) -> list[dict[str, str]]:
+    with open(path, 'r') as file:
+        return yaml.load(file.read(), yaml.CLoader)
+
+def save(path: str, content: str):
+    with open(path, 'w') as file:
+        file.write(content)
+
+def main():
+    if len(sys.argv) < 2:
+        print("specify the recipes file path")
+        sys.exit(1)
+
+    content = loadAndParse(sys.argv[1])
+    content.sort(key=lambda r: r["lang"])
+
+    save(sys.argv[1], yaml.dump(content))
+
+main()

@@ -11,7 +11,7 @@ type Recipe struct {
 	Lang string         `yaml:"lang"`
 	Provider string     `yaml:"provider"`
 	Ref string          `yaml:"ref"`
-	ExtraSteps []string `yaml:"extraSteps"`
+	Steps []string `yaml:"steps"`
 }
 
 func loadRecipesFile(path string) ([]byte, error) {
