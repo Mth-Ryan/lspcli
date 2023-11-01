@@ -23,6 +23,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -38,6 +39,11 @@ var installCmd = &cobra.Command{
 		
 Check the dependencies of the tool before call install.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) < 1 {
+			cmd.Help()
+			os.Exit(1)
+		}
+
 		fmt.Println("install called")
 	},
 }

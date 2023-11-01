@@ -23,6 +23,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -36,6 +37,11 @@ var updateCmd = &cobra.Command{
   lspcli update typescript-language-server
   lspcli update omnisharp`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) < 1 {
+			cmd.Help()
+			os.Exit(1)
+		}
+
 		fmt.Println("update called")
 	},
 }

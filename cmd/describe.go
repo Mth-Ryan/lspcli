@@ -23,6 +23,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -39,6 +40,11 @@ description, etc. Examples:
   lspcli describe omnisharp		
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) < 1 {
+			cmd.Help()
+			os.Exit(1)
+		}
+
 		fmt.Println("describe called")
 	},
 }

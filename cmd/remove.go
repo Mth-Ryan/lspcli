@@ -23,6 +23,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -37,6 +38,11 @@ var removeCmd = &cobra.Command{
   lspcli remove omnisharp		
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) < 1 {
+			cmd.Help()
+			os.Exit(1)
+		}
+
 		fmt.Println("remove called")
 	},
 }
