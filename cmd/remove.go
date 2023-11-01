@@ -30,13 +30,12 @@ import (
 // removeCmd represents the remove command
 var removeCmd = &cobra.Command{
 	Use:   "remove",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Remove an installed tool",
+	Long: `Remove an tool installed by the cli. Examples:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+  lspcli remove typescript-language-server
+  lspcli remove omnisharp		
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("remove called")
 	},
@@ -54,4 +53,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// removeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	removeCmd.Flags().BoolP("json", "j", false, "Send the output as a json object")
 }

@@ -30,13 +30,13 @@ import (
 // installCmd represents the install command
 var installCmd = &cobra.Command{
 	Use:   "install",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Install a new tool",
+	Long: `You can install any tool available on the cli. Examples:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+  lspcli install typescript-language-server
+  lspcli install omnisharp
+		
+Check the dependencies of the tool before call install.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("install called")
 	},
@@ -54,4 +54,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// installCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	installCmd.Flags().BoolP("json", "j", false, "Send the output as a json object")
 }

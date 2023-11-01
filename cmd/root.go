@@ -38,10 +38,10 @@ var rootCmd = &cobra.Command{
 	Long: `Manage all your LSPs and programming tools from one cli.
 
 Use lspci to install, update or delete programming tools: LSPs,
-linters, debug adapters, etc. examples:
+linters, debug adapters, etc. Examples:
 
-lspcli list --lang typescript             # list all tools for Typescritpt
-lspcli install typescript-language-server # install a LSP`,
+ lspcli list --lang typescript             # list all tools for Typescritpt
+ lspcli install typescript-language-server # install a LSP`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

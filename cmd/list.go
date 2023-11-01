@@ -31,11 +31,11 @@ import (
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all available tools",
-	Long: `List all avaliable tools to install as a table. examples:
+	Long: `List all avaliable tools. Examples:
 		
-lspcli list                   # list all tools
-lspcli list --lang typescript # list all tools for typescript language
-lspcli list --kind lsp        # list all lsp tools
+  lspcli list                   # list all tools
+  lspcli list --lang typescript # list all tools for the typescript language
+  lspcli list --kind lsp        # list all lsp tools
 		
 You also can also return the output as json with the json flag.`,
 	Run: func(cmd *cobra.Command, args []string) {
