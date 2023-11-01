@@ -1,37 +1,28 @@
+/*
+Copyright © 2023 Mateus Ryan <mthryan@protonmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
 package main
 
-import (
-	"flag"
-	"fmt"
-	"os"
-
-	"github.com/Mth-Ryan/lspcli/config"
-	"github.com/Mth-Ryan/lspcli/tui"
-	tea "github.com/charmbracelet/bubbletea"
-)
-
-func versionDialog() {
-	conf := config.Get()
-
-	fmt.Printf("lspcli %s", conf.Version)
-	if conf.ExecMode == config.EXEC_DEBUG {
-		fmt.Print(" \033[31mDEBUG Build\033[0m")
-	}
-	fmt.Print("\n")
-}
+import "github.com/Mth-Ryan/lspcli/cmd"
 
 func main() {
-	version := flag.Bool("version", false, "Show the program version")
-	flag.Parse()
-
-	if *version {
-		versionDialog()
-		return
-	}
-
-	m := tui.InitTuiModel()
-	if _, err := tea.NewProgram(m).Run(); err != nil {
-		fmt.Println("Error running program:", err)
-		os.Exit(1)
-	}
+	cmd.Execute()
 }

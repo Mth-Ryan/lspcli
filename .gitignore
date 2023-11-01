@@ -22,7 +22,3 @@ go.work
 
 # Standad binary
 lspcli
-
-# runtime folders
-runtime/bin/
-runtime/installs/
