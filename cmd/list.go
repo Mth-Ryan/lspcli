@@ -24,6 +24,8 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/Mth-Ryan/lspcli/pkg/commands"
+	"github.com/Mth-Ryan/lspcli/pkg/tools"
 	"github.com/spf13/cobra"
 )
 
@@ -39,7 +41,17 @@ var listCmd = &cobra.Command{
 		
 You also can also return the output as json with the json flag.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		toolsReader := tools.NewRuntimeReader("./runtime")
+		listCommand := commands.NewListCommand(toolsReader)
+
+		tools, err := listCommand.GetAll(nil)
+		if err != nil {
+			cobra.CheckErr(err)
+		}
+
+		for i, tool := range tools {
+			fmt.Printf("%d | %s: %s\n", i, tool.ID, tool.Name)
+		}
 	},
 }
 
