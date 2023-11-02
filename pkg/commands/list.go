@@ -1,49 +1,58 @@
 package commands
 
 import (
+	"strings"
+
+	"github.com/Mth-Ryan/lspcli/internal/utils"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 )
 
 type ListCommand struct {
 	reader tools.Reader
+	writer tools.Writer
 }
 
-func NewListCommand(reader tools.Reader) *ListCommand {
+func NewListCommand(reader tools.Reader, writer tools.Writer) *ListCommand {
 	return &ListCommand{
 		reader,
+		writer,
 	}
 }
 
-func filter[T any](slice []T, f func(T) bool) []T {
-	newValues := []T{}
-	for _, value := range slice {
-		if f(value) {
-			newValues = append(newValues, value)
+// This can be replaced with a builder
+func (l *ListCommand) createFilter(installed bool, kind string, lang string) func(models.Tool) bool {
+	return func(t models.Tool) bool {
+		pass := true
+
+		if installed {
+			pass = pass && t.LatestVersion != nil
 		}
-	}
 
-	return newValues
+		if kind != "" {
+			pass = pass && strings.ToLower(t.Kind) == strings.ToLower(kind)
+		}
+
+		if lang != "" {
+			pass = pass && utils.Any(
+				utils.Map(t.Languages, strings.ToLower),
+				strings.ToLower(lang),
+			)
+		}
+
+		return pass
+	}
 }
 
-func fmap[T any](slice []T, f func(T) T) []T {
-	newValues := []T{}
-	for _, value := range slice {
-		newValues = append(newValues, f(value))
-	}
-
-	return newValues
-}
-
-func (l *ListCommand) GetAll(where *(func(models.Tool) bool)) ([]models.Tool, error) {
+func (l *ListCommand) Run(installed bool, kind string, lang string) error {
 	tools, err := l.reader.GetAll()
 	if err != nil {
-		return tools, err
+		return err
 	}
 
-	if where != nil {
-		return filter(tools, *where), nil
-	}
+	where := l.createFilter(installed, kind, lang)
 
-	return tools, nil
+	l.writer.Write(utils.Filter(tools, where))
+
+	return nil
 }

@@ -1,4 +1,5 @@
-id: omnisharp 
+id: omnisharp
+kind: lsp
 name: OmniSharp
 description: |
   OmniSharp is a .NET development platform based on Roslyn workspaces. It provides project dependencies 

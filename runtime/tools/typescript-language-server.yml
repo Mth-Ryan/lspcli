@@ -1,4 +1,5 @@
 id: typescript-language-server
+kind: lsp
 name: Typescript Language Server
 description: |
   Language Server Protocol implementation for TypeScript wrapping tsserver.
