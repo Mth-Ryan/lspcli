@@ -1,0 +1,15 @@
+id: typescript-language-server
+name: Typescript Language Server
+description: |
+  Language Server Protocol implementation for TypeScript wrapping tsserver.
+url: https://github.com/typescript-language-server/typescript-language-server
+dependencies:
+  - nodejs
+  - npm
+languages:
+  - Typescript
+  - Javascript
+recipe:
+  kind: npm
+  npm:
+    package: typescript-language-server

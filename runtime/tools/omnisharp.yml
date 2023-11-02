@@ -1,0 +1,16 @@
+id: omnisharp 
+name: OmniSharp
+description: |
+  OmniSharp is a .NET development platform based on Roslyn workspaces. It provides project dependencies 
+  and C# language services to various IDEs and plugins.
+url: https://github.com/OmniSharp/omnisharp-roslyn
+dependencies:
+  - curl
+languages:
+  - C#
+recipe:
+  kind: git_release
+  git_release:
+    repository: https://github.com/OmniSharp/omnisharp-roslyn
+    package: |
+      omnisharp-{{ os }}-{{ arch }}-net6.0.zip 
