@@ -22,9 +22,12 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/Mth-Ryan/lspcli/pkg/animations"
+	"github.com/Mth-Ryan/lspcli/pkg/commands"
+	"github.com/Mth-Ryan/lspcli/pkg/result"
+	"github.com/Mth-Ryan/lspcli/pkg/tools"
 	"github.com/spf13/cobra"
 )
 
@@ -44,7 +47,20 @@ Check the dependencies of the tool before call install.`,
 			os.Exit(1)
 		}
 
-		fmt.Println("install called")
+		jsonOut, _ := cmd.Flags().GetBool("json")
+		runtimePath, _ := cmd.Flags().GetString("runtime")
+
+		toolsReader := tools.NewRuntimeReader(runtimePath)
+		animationWriter := animations.NewPlainWriter()
+		var resultWriter result.Writer = result.NewPlainWriter()
+		if jsonOut {
+			resultWriter = result.NewJsonWriter()
+		}
+
+		command := commands.NewInstallCommand(toolsReader, resultWriter, animationWriter)
+
+		id := args[0]
+		command.Run(id)
 	},
 }
 

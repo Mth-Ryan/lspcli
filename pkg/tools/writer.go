@@ -98,7 +98,7 @@ func NewJsonWriter() *JsonWriter {
 func (w *JsonWriter) WriteAll(tools []models.Tool) {
 	raw, err := json.Marshal(utils.Map(tools, models.ToShort))
 	if err != nil {
-		panic("Unable to unmarshal tools slice to json. This should be unreachable")
+		panic("Unable to marshal the tools slice to json. This should be unreachable")
 	}
 	json := string(raw[:])
 	fmt.Println(json)
@@ -107,7 +107,7 @@ func (w *JsonWriter) WriteAll(tools []models.Tool) {
 func (w *JsonWriter) Write(tool models.Tool) {
 	raw, err := json.Marshal(models.ToDescribe(tool))
 	if err != nil {
-		panic("Unable to unmarshal tool struct to json. This should be unreachable")
+		panic("Unable to marshal the tool struct to json. This should be unreachable")
 	}
 	json := string(raw[:])
 	fmt.Println(json)
