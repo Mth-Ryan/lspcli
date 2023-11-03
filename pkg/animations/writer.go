@@ -43,10 +43,11 @@ func (w *PlainWriter) Loading(ctx context.Context, message string) {
 	hideCursor()
 	for {
 		select {
+		// FIXME: loading new line
 		case <-ctx.Done():
 			screenClear()
-			fmt.Println()
 			showCursor()
+			fmt.Println()
 			return
 
 		default:

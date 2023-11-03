@@ -12,15 +12,24 @@ type Writer interface {
 	Write(models.Result)
 }
 
-type PlainWriter struct{}
+type PlainWriter struct {
+	errFmt     func(string, ...any)
+	successFmt func(string, ...any)
+}
 
 func NewPlainWriter() *PlainWriter {
-	return &PlainWriter{}
+	return &PlainWriter{
+		errFmt:     color.New(color.FgRed).PrintfFunc(),
+		successFmt: color.New(color.FgGreen).PrintfFunc(),
+	}
 }
 
 func (w *PlainWriter) Write(result models.Result) {
-	printFmt := color.New(color.FgRed).PrintfFunc()
-	printFmt("Error: %s.\n", result.Message)
+	if result.Kind == models.RESULT_OK {
+		w.successFmt("%s\n", result.Message)
+	} else {
+		w.errFmt("Error: %s.\n", result.Message)
+	}
 }
 
 type JsonWriter struct{}
