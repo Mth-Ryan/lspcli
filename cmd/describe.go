@@ -22,9 +22,10 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/Mth-Ryan/lspcli/pkg/commands"
+	"github.com/Mth-Ryan/lspcli/pkg/tools"
 	"github.com/spf13/cobra"
 )
 
@@ -45,7 +46,24 @@ description, etc. Examples:
 			os.Exit(1)
 		}
 
-		fmt.Println("describe called")
+		jsonOut, _ := cmd.Flags().GetBool("json")
+		runtimePath, _ := cmd.Flags().GetString("runtime")
+
+		var toolsWriter tools.Writer = tools.NewTableWriter()
+		if jsonOut {
+			toolsWriter = tools.NewJsonWriter()
+		}
+		toolsReader := tools.NewRuntimeReader(runtimePath)
+		describeCommand := commands.NewDescribeCommand(
+			toolsReader,
+			toolsWriter,
+		)
+
+		id := args[0]
+		err := describeCommand.Run(id)
+		if err != nil {
+			cobra.CheckErr(err)
+		}
 	},
 }
 

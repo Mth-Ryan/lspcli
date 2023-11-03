@@ -12,7 +12,8 @@ import (
 )
 
 type Writer interface {
-	Write([]models.Tool)
+	WriteAll([]models.Tool)
+	Write(models.Tool)
 }
 
 type TableWriter struct {
@@ -29,7 +30,7 @@ func NewTableWriter() *TableWriter {
 	}
 }
 
-func (w *TableWriter) createTable() table.Table {
+func (w *TableWriter) createListTable() table.Table {
 	tbl := table.New("id", "name", "kind", "languages", "installed version")
 	tbl.WithPadding(w.padding)
 	tbl.WithHeaderFormatter(w.headerFmt)
@@ -38,7 +39,7 @@ func (w *TableWriter) createTable() table.Table {
 	return tbl
 }
 
-func (w *TableWriter) addRow(tbl table.Table, tool models.Tool) {
+func (w *TableWriter) addListRow(tbl table.Table, tool models.Tool) {
 	languages := strings.Join(tool.Languages, ", ")
 	version := ""
 	if tool.InstalledVersion != nil {
@@ -54,14 +55,36 @@ func (w *TableWriter) addRow(tbl table.Table, tool models.Tool) {
 	)
 }
 
-func (w *TableWriter) Write(tools []models.Tool) {
-	tbl := w.createTable()
+func (w *TableWriter) WriteAll(tools []models.Tool) {
+	tbl := w.createListTable()
 
 	for _, tool := range tools {
-		w.addRow(tbl, tool)
+		w.addListRow(tbl, tool)
 	}
 
 	fmt.Println()
+	tbl.Print()
+	fmt.Println()
+}
+
+func (w *TableWriter) Write(tool models.Tool) {
+	tbl := table.New("", "")
+	tbl.WithFirstColumnFormatter(w.headerFmt)
+
+	tbl.AddRow("id", w.idFmt("%s", tool.ID))
+	tbl.AddRow("kind", tool.Kind)
+	tbl.AddRow("name", tool.Name)
+	tbl.AddRow("languages", strings.Join(tool.Languages, ", "))
+	tbl.AddRow("dependencies", strings.Join(tool.Dependencies, ", "))
+	if tool.LatestVersion != nil {
+		tbl.AddRow("latest version", tool.LatestVersion)
+	}
+	if tool.InstalledVersion != nil {
+		tbl.AddRow("installed version", tool.InstalledVersion)
+	}
+	tbl.AddRow("Url", tool.Url)
+	tbl.AddRow("Description", tool.Description)
+
 	tbl.Print()
 	fmt.Println()
 }
@@ -72,10 +95,19 @@ func NewJsonWriter() *JsonWriter {
 	return &JsonWriter{}
 }
 
-func (w *JsonWriter) Write(tools []models.Tool) {
+func (w *JsonWriter) WriteAll(tools []models.Tool) {
 	raw, err := json.Marshal(utils.Map(tools, models.ToShort))
 	if err != nil {
 		panic("Unable to unmarshal tools slice to json. This should be unreachable")
+	}
+	json := string(raw[:])
+	fmt.Println(json)
+}
+
+func (w *JsonWriter) Write(tool models.Tool) {
+	raw, err := json.Marshal(models.ToDescribe(tool))
+	if err != nil {
+		panic("Unable to unmarshal tool struct to json. This should be unreachable")
 	}
 	json := string(raw[:])
 	fmt.Println(json)

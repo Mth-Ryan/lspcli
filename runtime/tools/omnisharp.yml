@@ -7,11 +7,13 @@ description: |
 url: https://github.com/OmniSharp/omnisharp-roslyn
 dependencies:
   - curl
+  - .Net >= 6.0
 languages:
   - C#
 recipe:
   kind: git_release
   git_release:
     repository: https://github.com/OmniSharp/omnisharp-roslyn
+    binary_inner_path: OmniSharp
     package: |
       omnisharp-{{ os }}-{{ arch }}-net6.0.zip 

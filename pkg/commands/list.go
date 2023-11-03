@@ -52,7 +52,7 @@ func (l *ListCommand) Run(installed bool, kind string, lang string) error {
 
 	where := l.createFilter(installed, kind, lang)
 
-	l.writer.Write(utils.Filter(tools, where))
+	l.writer.WriteAll(utils.Filter(tools, where))
 
 	return nil
 }
