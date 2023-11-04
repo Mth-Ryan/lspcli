@@ -26,4 +26,5 @@ type NpmRecipe struct {
 type GitReleaseRecipe struct {
 	Repository      string `json:"repository" yaml:"repository"`
 	BinaryInnerPath string `json:"binary_inner_path" yaml:"binary_inner_path"`
+	Package         string `json:"package" yaml:"package"`
 }

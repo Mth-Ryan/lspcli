@@ -38,7 +38,7 @@ func (d *InstallCommand) Run(id string) error {
 
 	go d.animationWriter.Loading(ctx, "installing")
 
-	provider, err := providers.GetProvider(tool.Recipe.Kind)
+	provider, err := providers.GetProvider(tool)
 	if err != nil {
 		return err
 	}
@@ -46,7 +46,7 @@ func (d *InstallCommand) Run(id string) error {
 	var kind = models.RESULT_OK
 	var message = fmt.Sprintf("%s was successfully", tool.Name)
 
-	if err := provider.Install(tool); err != nil {
+	if err := provider.Install(); err != nil {
 		kind = models.RESULT_ERR
 		message = err.Error()
 	}

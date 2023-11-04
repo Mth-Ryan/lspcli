@@ -1,25 +1,38 @@
 package providers
 
-import "github.com/Mth-Ryan/lspcli/pkg/models"
+import (
+	"github.com/Mth-Ryan/lspcli/pkg/models"
+	"github.com/Mth-Ryan/lspcli/pkg/recipes"
+)
 
-type GitReleaseProvider struct{}
+type GitReleaseProvider struct {
+	tool             models.Tool
+	recipeItemParser recipes.ItemsParser
+}
 
-func (e *GitReleaseProvider) Install(tool models.Tool) error {
+func NewGitReleaseProvider(tool models.Tool) Provider {
+	return &GitReleaseProvider{
+		tool:             tool,
+		recipeItemParser: *recipes.NewItemsParser(),
+	}
+}
+
+func (e *GitReleaseProvider) Install() error {
 	return nil
 }
 
-func (e *GitReleaseProvider) Update(tool models.Tool) error {
+func (e *GitReleaseProvider) Update() error {
 	return nil
 }
 
-func (e *GitReleaseProvider) Remove(tool models.Tool) error {
+func (e *GitReleaseProvider) Remove() error {
 	return nil
 }
 
-func (e *GitReleaseProvider) LatestVersion(tool models.Tool) error {
+func (e *GitReleaseProvider) LatestVersion() error {
 	return nil
 }
 
-func (e *GitReleaseProvider) InstaledVersion(tool models.Tool) error {
+func (e *GitReleaseProvider) InstaledVersion() error {
 	return nil
 }

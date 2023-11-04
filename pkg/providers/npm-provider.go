@@ -2,24 +2,32 @@ package providers
 
 import "github.com/Mth-Ryan/lspcli/pkg/models"
 
-type NpmProvider struct{}
+type NpmProvider struct {
+	tool models.Tool
+}
 
-func (e *NpmProvider) Install(tool models.Tool) error {
+func NewNpmProvider(tool models.Tool) Provider {
+	return &NpmProvider{
+		tool,
+	}
+}
+
+func (e *NpmProvider) Install() error {
 	return nil
 }
 
-func (e *NpmProvider) Update(tool models.Tool) error {
+func (e *NpmProvider) Update() error {
 	return nil
 }
 
-func (e *NpmProvider) Remove(tool models.Tool) error {
+func (e *NpmProvider) Remove() error {
 	return nil
 }
 
-func (e *NpmProvider) LatestVersion(tool models.Tool) error {
+func (e *NpmProvider) LatestVersion() error {
 	return nil
 }
 
-func (e *NpmProvider) InstaledVersion(tool models.Tool) error {
+func (e *NpmProvider) InstaledVersion() error {
 	return nil
 }

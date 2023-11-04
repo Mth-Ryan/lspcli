@@ -7,22 +7,26 @@ import (
 )
 
 type Provider interface {
-	Install(tool models.Tool) error
-	Update(tool models.Tool) error
-	Remove(tool models.Tool) error
-	LatestVersion(tool models.Tool) error
-	InstaledVersion(tool models.Tool) error
+	Install() error
+	Update() error
+	Remove() error
+	LatestVersion() error
+	InstaledVersion() error
 }
 
-var providers = map[string]Provider{
-	models.RECIPE_GIT_RELEASE: new(GitReleaseProvider),
-	models.RECIPE_GO:          new(GoProvider),
-	models.RECIPE_NPM:         new(NpmProvider),
+type ProviderConstructor = func(models.Tool) Provider
+
+var providersConstructors = map[string]ProviderConstructor{
+	models.RECIPE_GIT_RELEASE: NewGitReleaseProvider,
+	models.RECIPE_GO:          NewGoProvider,
+	models.RECIPE_NPM:         NewNpmProvider,
 }
 
-func GetProvider(kind string) (Provider, error) {
-	if provider, ok := providers[kind]; ok {
-		return provider, nil
+func GetProvider(tool models.Tool) (Provider, error) {
+	kind := tool.Recipe.Kind
+
+	if constructors, ok := providersConstructors[kind]; ok {
+		return constructors(tool), nil
 	}
 	return &ErrProvider{}, fmt.Errorf("Invalid recipe kind: %s", kind)
 }
