@@ -3,6 +3,7 @@ module github.com/Mth-Ryan/lspcli
 go 1.21.3
 
 require (
+	atomicgo.dev/cursor v0.2.0 // indirect
 	github.com/fatih/color v1.15.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect

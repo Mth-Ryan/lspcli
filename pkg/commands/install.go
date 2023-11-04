@@ -32,8 +32,9 @@ func (d *InstallCommand) Run(id string) error {
 		return err
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx, animationCancel := context.WithCancel(context.Background())
+	defer animationCancel()
+	defer d.animationWriter.Clear()
 
 	go d.animationWriter.Loading(ctx, "installing")
 
@@ -51,6 +52,8 @@ func (d *InstallCommand) Run(id string) error {
 	}
 
 	time.Sleep(3 * time.Second)
+	animationCancel()
+	d.animationWriter.Clear()
 
 	d.resultWriter.Write(models.Result{
 		Kind:    kind,
