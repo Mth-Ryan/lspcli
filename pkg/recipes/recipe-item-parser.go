@@ -3,6 +3,7 @@ package recipes
 import (
 	"bytes"
 	"runtime"
+	"strings"
 	"text/template"
 )
 
@@ -28,7 +29,7 @@ func NewItemsParser() *ItemsParser {
 
 func (p *ItemsParser) Parse(item string) (string, error) {
 	templ, err := template.New("item").
-		Funcs(template.FuncMap{}).
+		Funcs(parserTmplFuncs).
 		Parse(item)
 
 	if err != nil {
@@ -40,5 +41,33 @@ func (p *ItemsParser) Parse(item string) (string, error) {
 		return item, err
 	}
 
-	return buf.String(), nil
+	return strings.TrimSpace(buf.String()), nil
+}
+
+var parserTmplFuncs = map[string]any{
+	"alterOS": func(o string) string {
+		switch o {
+		case "windows":
+			return "win"
+		case "darwin":
+			return "osx"
+		default:
+			return o
+		}
+	},
+
+	"alterArch": func(o string) string {
+		switch o {
+		case "386":
+			return "x86"
+		case "amd64":
+			return "x64"
+		case "arm":
+			return "aarch"
+		case "arm64":
+			return "aarch64"
+		default:
+			return o
+		}
+	},
 }

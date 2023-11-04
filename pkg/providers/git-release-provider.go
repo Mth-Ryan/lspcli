@@ -1,6 +1,8 @@
 package providers
 
 import (
+	"fmt"
+
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/recipes"
 )
@@ -18,7 +20,12 @@ func NewGitReleaseProvider(tool models.Tool) Provider {
 }
 
 func (e *GitReleaseProvider) Install() error {
-	return nil
+	pack, err := e.recipeItemParser.Parse(e.tool.Recipe.GitReleaseRecipe.Package)
+	if err != nil {
+		return err
+	}
+
+	return fmt.Errorf(pack)
 }
 
 func (e *GitReleaseProvider) Update() error {
