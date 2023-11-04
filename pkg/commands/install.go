@@ -37,7 +37,7 @@ func (d *InstallCommand) Run(id string) error {
 
 	go d.animationWriter.Loading(ctx, "installing")
 
-	provider, err := providers.GetProvider(tool)
+	provider, err := providers.GetProvider(tool.Recipe.Kind)
 	if err != nil {
 		return err
 	}

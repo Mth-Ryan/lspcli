@@ -20,9 +20,9 @@ var providers = map[string]Provider{
 	models.RECIPE_NPM:         new(NpmProvider),
 }
 
-func GetProvider(tool models.Tool) (Provider, error) {
-	if provider, ok := providers[tool.Recipe.Kind]; ok {
+func GetProvider(kind string) (Provider, error) {
+	if provider, ok := providers[kind]; ok {
 		return provider, nil
 	}
-	return &ErrProvider{}, fmt.Errorf("Invalid recipe kind: %s", tool.Recipe.Kind)
+	return &ErrProvider{}, fmt.Errorf("Invalid recipe kind: %s", kind)
 }
