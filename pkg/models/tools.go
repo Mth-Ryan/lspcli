@@ -21,16 +21,16 @@ type ToolDescribe struct {
 }
 
 type Tool struct {
-	ID               string   `json:"id" yaml:"id"`
-	Name             string   `json:"name" yaml:"name"`
-	Description      string   `json:"description" yaml:"description"`
-	Url              string   `json:"url" yaml:"url"`
-	LatestVersion    *string  `json:"latest_version,omitempty" yaml:"latest_version,omitempty"`
-	InstalledVersion *string  `json:"installed_version,omitempty" yaml:"installed_version,omitempty"`
-	Dependencies     []string `json:"dependencies" yaml:"dependencies"`
-	Languages        []string `json:"languages" yaml:"languages"`
-	Kind             string   `json:"kind" yaml:"kind"`
-	Recipe           Recipe   `json:"recipe" yaml:"recipe"`
+	ID               string         `json:"id" yaml:"id"`
+	Name             string         `json:"name" yaml:"name"`
+	Description      string         `json:"description" yaml:"description"`
+	Url              string         `json:"url" yaml:"url"`
+	LatestVersion    *string        `json:"latest_version,omitempty" yaml:"latest_version,omitempty"`
+	InstalledVersion *string        `json:"installed_version,omitempty" yaml:"installed_version,omitempty"`
+	Dependencies     []string       `json:"dependencies" yaml:"dependencies"`
+	Languages        []string       `json:"languages" yaml:"languages"`
+	Kind             string         `json:"kind" yaml:"kind"`
+	Recipe           map[string]any `json:"recipe" yaml:"recipe"`
 }
 
 func ToShort(m Tool) ToolShort {

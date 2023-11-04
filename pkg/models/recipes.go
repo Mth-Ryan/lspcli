@@ -9,21 +9,22 @@ const (
 )
 
 type Recipe struct {
-	Kind             RecipeKind        `json:"kind" yaml:"kind"`
-	GoRecipe         *GoRecipe         `json:"go,omitempty" yaml:"go,omitempty"`
-	NpmRecipe        *NpmRecipe        `json:"npm,omitempty" yaml:"npm,omitempty"`
-	GitReleaseRecipe *GitReleaseRecipe `json:"git_release,omitempty" yaml:"git_release,omitempty"`
+	Kind            RecipeKind                        `json:"kind" yaml:"kind"`
+	ContextReplaces *(map[string](map[string]string)) `json:"context_replaces" yaml:"context_replaces"`
 }
 
 type GoRecipe struct {
+	Recipe
 	Package string `json:"package" yaml:"package"`
 }
 
 type NpmRecipe struct {
+	Recipe
 	Package string `json:"package" yaml:"package"`
 }
 
 type GitReleaseRecipe struct {
+	Recipe
 	Repository      string `json:"repository" yaml:"repository"`
 	BinaryInnerPath string `json:"binary_inner_path" yaml:"binary_inner_path"`
 	Package         string `json:"package" yaml:"package"`

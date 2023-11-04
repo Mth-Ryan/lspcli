@@ -20,7 +20,7 @@ func NewGitReleaseProvider(tool models.Tool) Provider {
 }
 
 func (e *GitReleaseProvider) Install() error {
-	pack, err := e.recipeItemParser.Parse(e.tool.Recipe.GitReleaseRecipe.Package)
+	pack, err := e.recipeItemParser.Parse(fmt.Sprint(e.tool.Recipe["package"]))
 	if err != nil {
 		return err
 	}

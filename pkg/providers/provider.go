@@ -23,9 +23,12 @@ var providersConstructors = map[string]ProviderConstructor{
 }
 
 func GetProvider(tool models.Tool) (Provider, error) {
-	kind := tool.Recipe.Kind
+	kind, ok := tool.Recipe["kind"]
+	if !ok {
+		return &ErrProvider{}, fmt.Errorf("unable to get the tool's recipe kind")
+	}
 
-	if constructors, ok := providersConstructors[kind]; ok {
+	if constructors, ok := providersConstructors[fmt.Sprint(kind)]; ok {
 		return constructors(tool), nil
 	}
 	return &ErrProvider{}, fmt.Errorf("Invalid recipe kind: %s", kind)

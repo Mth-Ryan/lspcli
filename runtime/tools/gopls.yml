@@ -12,5 +12,4 @@ languages:
   - Go
 recipe:
   kind: go
-  go:
-    package: golang.org/x/tools/gopls
+  package: golang.org/x/tools/gopls

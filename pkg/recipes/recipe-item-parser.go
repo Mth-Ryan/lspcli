@@ -28,9 +28,7 @@ func NewItemsParser() *ItemsParser {
 }
 
 func (p *ItemsParser) Parse(item string) (string, error) {
-	templ, err := template.New("item").
-		Funcs(parserTmplFuncs).
-		Parse(item)
+	templ, err := template.New("item").Parse(item)
 
 	if err != nil {
 		return item, err
@@ -42,32 +40,4 @@ func (p *ItemsParser) Parse(item string) (string, error) {
 	}
 
 	return strings.TrimSpace(buf.String()), nil
-}
-
-var parserTmplFuncs = map[string]any{
-	"alterOS": func(o string) string {
-		switch o {
-		case "windows":
-			return "win"
-		case "darwin":
-			return "osx"
-		default:
-			return o
-		}
-	},
-
-	"alterArch": func(o string) string {
-		switch o {
-		case "386":
-			return "x86"
-		case "amd64":
-			return "x64"
-		case "arm":
-			return "aarch"
-		case "arm64":
-			return "aarch64"
-		default:
-			return o
-		}
-	},
 }

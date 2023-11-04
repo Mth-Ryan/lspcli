@@ -12,5 +12,4 @@ languages:
   - Javascript
 recipe:
   kind: npm
-  npm:
-    package: typescript-language-server
+  package: typescript-language-server
