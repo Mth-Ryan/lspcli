@@ -8,19 +8,23 @@ import (
 )
 
 type GitReleaseProvider struct {
-	tool          models.Tool
-	recipesParser *recipes.GitReleaseRecipeParser
+	tool         models.Tool
+	recipeParser *recipes.GitReleaseRecipeParser
+}
+
+func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
+	return e.recipeParser.Parse(e.tool.Recipe)
 }
 
 func NewGitReleaseProvider(tool models.Tool) Provider {
 	return &GitReleaseProvider{
-		tool:          tool,
-		recipesParser: recipes.NewGitReleaseRecipeParser(),
+		tool:         tool,
+		recipeParser: recipes.NewGitReleaseRecipeParser(),
 	}
 }
 
 func (e *GitReleaseProvider) Install() error {
-	recipe, err := e.recipesParser.Parse(e.tool.Recipe)
+	recipe, err := e.getRecipe()
 	if err != nil {
 		return err
 	}

@@ -66,3 +66,14 @@ func (p *TemplateParser) Parse(item string) (string, error) {
 
 	return strings.TrimSpace(buf.String()), nil
 }
+
+func getReplacesFromRecipe(raw map[string]any) models.RecipeContextReplaces {
+	var replaces models.RecipeContextReplaces
+	if repl, ok := raw["context_replaces"]; ok {
+		switch r := repl.(type) {
+		case models.RecipeContextReplaces:
+			replaces = r
+		}
+	}
+	return replaces
+}
