@@ -8,24 +8,26 @@ const (
 	RECIPE_NPM         = "npm"
 )
 
+type RecipeContextReplaces = *(map[string](map[string]string))
+
 type Recipe struct {
-	Kind            RecipeKind                        `json:"kind" yaml:"kind"`
-	ContextReplaces *(map[string](map[string]string)) `json:"context_replaces" yaml:"context_replaces"`
+	Kind            RecipeKind            `json:"kind" yaml:"kind" mapstructure:"kind"`
+	ContextReplaces RecipeContextReplaces `json:"context_replaces" yaml:"context_replaces" mapstructure:"context_replaces"`
 }
 
 type GoRecipe struct {
-	Recipe
-	Package string `json:"package" yaml:"package"`
+	Recipe  `mapstructure:",squash"`
+	Package string `json:"package" yaml:"package" mapstructure:"package"`
 }
 
 type NpmRecipe struct {
-	Recipe
-	Package string `json:"package" yaml:"package"`
+	Recipe  `mapstructure:",squash"`
+	Package string `json:"package" yaml:"package" mapstructure:"package"`
 }
 
 type GitReleaseRecipe struct {
-	Recipe
-	Repository      string `json:"repository" yaml:"repository"`
-	BinaryInnerPath string `json:"binary_inner_path" yaml:"binary_inner_path"`
-	Package         string `json:"package" yaml:"package"`
+	Recipe          `mapstructure:",squash"`
+	Repository      string `json:"repository" yaml:"repository" mapstructure:"repository"`
+	BinaryInnerPath string `json:"binary_inner_path" yaml:"binary_inner_path" mapstructure:"binary_inner_path"`
+	Package         string `json:"package" yaml:"package" mapstructure:"package"`
 }
