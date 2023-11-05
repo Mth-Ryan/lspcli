@@ -77,10 +77,10 @@ func (w *TableWriter) Write(tool models.Tool) {
 	tbl.AddRow("languages", strings.Join(tool.Languages, ", "))
 	tbl.AddRow("dependencies", strings.Join(tool.Dependencies, ", "))
 	if tool.LatestVersion != nil {
-		tbl.AddRow("latest version", tool.LatestVersion)
+		tbl.AddRow("latest version", *tool.LatestVersion)
 	}
 	if tool.InstalledVersion != nil {
-		tbl.AddRow("installed version", tool.InstalledVersion)
+		tbl.AddRow("installed version", *tool.InstalledVersion)
 	}
 	tbl.AddRow("Url", tool.Url)
 	tbl.AddRow("Description", tool.Description)

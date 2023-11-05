@@ -24,7 +24,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/Mth-Ryan/lspcli/pkg/animations"
 	"github.com/Mth-Ryan/lspcli/pkg/commands"
 	"github.com/Mth-Ryan/lspcli/pkg/result"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
@@ -51,13 +50,12 @@ Check the dependencies of the tool before call install.`,
 		runtimePath, _ := cmd.Flags().GetString("runtime")
 
 		toolsReader := tools.NewRuntimeReader(runtimePath)
-		animationWriter := animations.NewPlainWriter()
 		var resultWriter result.Writer = result.NewPlainWriter()
 		if jsonOut {
 			resultWriter = result.NewJsonWriter()
 		}
 
-		command := commands.NewInstallCommand(toolsReader, resultWriter, animationWriter)
+		command := commands.NewInstallCommand(toolsReader, resultWriter)
 
 		id := args[0]
 		command.Run(id)
