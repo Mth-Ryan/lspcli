@@ -12,7 +12,7 @@ languages:
   - C#
 recipe:
   kind: git_release
-  repository: https://github.com/OmniSharp/omnisharp-roslyn
+  repository: OmniSharp/omnisharp-roslyn
   binary_inner_path: OmniSharp
   package: |
     omnisharp-{{.OS}}-{{.Arch}}-net6.0.zip

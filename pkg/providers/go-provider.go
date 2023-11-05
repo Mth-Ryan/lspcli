@@ -40,10 +40,10 @@ func (e *GoProvider) Remove() error {
 	return nil
 }
 
-func (e *GoProvider) LatestVersion() error {
-	return nil
+func (e *GoProvider) LatestVersion() (string, error) {
+	return "", nil
 }
 
-func (e *GoProvider) InstaledVersion() error {
-	return nil
+func (e *GoProvider) InstaledVersion() (string, error) {
+	return "", nil
 }

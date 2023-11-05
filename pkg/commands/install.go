@@ -2,8 +2,6 @@ package commands
 
 import (
 	"context"
-	"fmt"
-	"time"
 
 	"github.com/Mth-Ryan/lspcli/pkg/animations"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
@@ -44,14 +42,16 @@ func (d *InstallCommand) Run(id string) error {
 	}
 
 	var kind = models.RESULT_OK
-	var message = fmt.Sprintf("%s was successfully", tool.Name)
+	var message = ""
 
-	if err := provider.Install(); err != nil {
+	version, err := provider.LatestVersion()
+	if err == nil {
+		message = version
+	} else {
 		kind = models.RESULT_ERR
 		message = err.Error()
 	}
 
-	time.Sleep(3 * time.Second)
 	animationCancel()
 	d.animationWriter.Clear()
 

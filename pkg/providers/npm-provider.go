@@ -40,10 +40,10 @@ func (e *NpmProvider) Remove() error {
 	return nil
 }
 
-func (e *NpmProvider) LatestVersion() error {
-	return nil
+func (e *NpmProvider) LatestVersion() (string, error) {
+	return "", nil
 }
 
-func (e *NpmProvider) InstaledVersion() error {
-	return nil
+func (e *NpmProvider) InstaledVersion() (string, error) {
+	return "", nil
 }

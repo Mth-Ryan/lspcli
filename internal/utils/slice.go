@@ -1,5 +1,7 @@
 package utils
 
+import "fmt"
+
 func Filter[A any](slice []A, f func(A) bool) []A {
 	newValues := []A{}
 	for _, value := range slice {
@@ -27,4 +29,13 @@ func Any[A comparable](slice []A, item A) bool {
 		}
 	}
 	return false
+}
+
+func First[A any](slice []A, f func(A) bool) (A, error) {
+	for _, value := range slice {
+		if f(value) {
+			return value, nil
+		}
+	}
+	return *new(A), fmt.Errorf("Item not found")
 }

@@ -14,10 +14,10 @@ func (e *ErrProvider) Remove() error {
 	return nil
 }
 
-func (e *ErrProvider) LatestVersion() error {
-	return nil
+func (e *ErrProvider) LatestVersion() (string, error) {
+	return "", nil
 }
 
-func (e *ErrProvider) InstaledVersion() error {
-	return nil
+func (e *ErrProvider) InstaledVersion() (string, error) {
+	return "", nil
 }

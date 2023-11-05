@@ -10,8 +10,8 @@ type Provider interface {
 	Install() error
 	Update() error
 	Remove() error
-	LatestVersion() error
-	InstaledVersion() error
+	LatestVersion() (string, error)
+	InstaledVersion() (string, error)
 }
 
 type ProviderConstructor = func(models.Tool) Provider

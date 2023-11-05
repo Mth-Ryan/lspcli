@@ -3,6 +3,7 @@ package providers
 import (
 	"fmt"
 
+	"github.com/Mth-Ryan/lspcli/pkg/handlers"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/recipes"
 )
@@ -10,6 +11,7 @@ import (
 type GitReleaseProvider struct {
 	tool         models.Tool
 	recipeParser *recipes.GitReleaseRecipeParser
+	handler      *handlers.GithubReleaseHandler
 }
 
 func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
@@ -20,6 +22,7 @@ func NewGitReleaseProvider(tool models.Tool) Provider {
 	return &GitReleaseProvider{
 		tool:         tool,
 		recipeParser: recipes.NewGitReleaseRecipeParser(),
+		handler:      handlers.NewGitReleaseHandler(),
 	}
 }
 
@@ -40,10 +43,16 @@ func (e *GitReleaseProvider) Remove() error {
 	return nil
 }
 
-func (e *GitReleaseProvider) LatestVersion() error {
-	return nil
+func (e *GitReleaseProvider) LatestVersion() (string, error) {
+	recipe, err := e.getRecipe()
+	if err != nil {
+		return "", err
+	}
+
+	release, err := e.handler.LatestVersion(recipe.Repository)
+	return release.TagName, err
 }
 
-func (e *GitReleaseProvider) InstaledVersion() error {
-	return nil
+func (e *GitReleaseProvider) InstaledVersion() (string, error) {
+	return "", nil
 }
