@@ -12,11 +12,12 @@ import (
 )
 
 type GitReleaseProvider struct {
-	tool         models.Tool
-	runtimeConf  runtime.Conf
-	recipeParser *recipes.GitReleaseRecipeParser
-	handler      *handlers.GithubReleaseHandler
-	logger       loggers.Logger
+	tool           models.Tool
+	runtimeConf    runtime.Conf
+	recipeParser   *recipes.GitReleaseRecipeParser
+	handler        *handlers.GithubReleaseHandler
+	logger         loggers.Logger
+	archiveFactory handlers.ArchiveHandlerFactory
 }
 
 func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
@@ -24,12 +25,14 @@ func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
 }
 
 func NewGitReleaseProvider(runConf runtime.Conf, tool models.Tool, logger loggers.Logger) Provider {
+
 	return &GitReleaseProvider{
-		tool:         tool,
-		runtimeConf:  runConf,
-		recipeParser: recipes.NewGitReleaseRecipeParser(),
-		handler:      handlers.NewGitReleaseHandler(logger),
-		logger:       logger,
+		tool:           tool,
+		runtimeConf:    runConf,
+		recipeParser:   recipes.NewGitReleaseRecipeParser(),
+		handler:        handlers.NewGitReleaseHandler(logger),
+		logger:         logger,
+		archiveFactory: handlers.NewNativeArchiveHandlerFactory(),
 	}
 }
 
@@ -49,6 +52,17 @@ func (e *GitReleaseProvider) Install() error {
 		recipe.Package,
 		cachedAsset,
 	)
+	if err != nil {
+		return err
+	}
+
+	archiveHandler, err := e.archiveFactory.GetHandler(recipe.Package)
+	if err != nil {
+		return err
+	}
+
+	installPath := path.Join(e.runtimeConf.InstallsPath(), e.tool.ID)
+	err = archiveHandler.Extract(cachedAsset, installPath)
 	if err != nil {
 		return err
 	}
