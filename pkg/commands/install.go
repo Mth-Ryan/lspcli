@@ -44,9 +44,9 @@ func (d *InstallCommand) Run(id string) error {
 	var kind = models.RESULT_OK
 	var message = ""
 
-	version, err := provider.LatestVersion()
+	err = provider.Install()
 	if err == nil {
-		message = version
+		message = "Tool installed successfully"
 	} else {
 		kind = models.RESULT_ERR
 		message = err.Error()

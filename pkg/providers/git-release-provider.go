@@ -1,7 +1,8 @@
 package providers
 
 import (
-	"fmt"
+	"os"
+	"path"
 
 	"github.com/Mth-Ryan/lspcli/pkg/handlers"
 	"github.com/Mth-Ryan/lspcli/pkg/loggers"
@@ -12,8 +13,10 @@ import (
 
 type GitReleaseProvider struct {
 	tool         models.Tool
+	runtimeConf  runtime.Conf
 	recipeParser *recipes.GitReleaseRecipeParser
 	handler      *handlers.GithubReleaseHandler
+	logger       loggers.Logger
 }
 
 func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
@@ -23,8 +26,10 @@ func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
 func NewGitReleaseProvider(runConf runtime.Conf, tool models.Tool, logger loggers.Logger) Provider {
 	return &GitReleaseProvider{
 		tool:         tool,
+		runtimeConf:  runConf,
 		recipeParser: recipes.NewGitReleaseRecipeParser(),
 		handler:      handlers.NewGitReleaseHandler(logger),
+		logger:       logger,
 	}
 }
 
@@ -34,7 +39,21 @@ func (e *GitReleaseProvider) Install() error {
 		return err
 	}
 
-	return fmt.Errorf(recipe.Package)
+	e.logger.Log("Removing the cached release file if exists")
+	cachedAsset := path.Join(e.runtimeConf.CachePath(), recipe.Package)
+
+	os.Remove(cachedAsset)
+
+	_, err = e.handler.DownloadAssetFromLatestVersion(
+		recipe.Repository,
+		recipe.Package,
+		cachedAsset,
+	)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (e *GitReleaseProvider) Update() error {

@@ -24,7 +24,7 @@ type GithubReleaseAsset struct {
 	Url                string `json:"url"`
 	Name               string `json:"name"`
 	ContentType        string `json:"content_type"`
-	Size               string `json:"size"`
+	Size               int    `json:"size"`
 	BrowserDownloadUrl string `json:"browser_download_url"`
 }
 
@@ -155,7 +155,7 @@ func (g *GithubReleaseHandler) DownloadAssetFromLatestVersion(repo string, asset
 	g.logger.Log("Downloading asset from: %s...", asset.BrowserDownloadUrl)
 	err = downloadFile(filepath, asset.BrowserDownloadUrl)
 
-	if err != nil {
+	if err == nil {
 		g.logger.Log("Download completed successfully")
 	}
 
