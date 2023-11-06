@@ -3,6 +3,7 @@ package providers
 import (
 	"fmt"
 
+	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 )
 
@@ -14,7 +15,7 @@ type Provider interface {
 	InstaledVersion() (string, error)
 }
 
-type ProviderConstructor = func(models.Tool) Provider
+type ProviderConstructor = func(models.Tool, loggers.Logger) Provider
 
 var providersConstructors = map[string]ProviderConstructor{
 	models.RECIPE_GIT_RELEASE: NewGitReleaseProvider,
@@ -22,14 +23,14 @@ var providersConstructors = map[string]ProviderConstructor{
 	models.RECIPE_NPM:         NewNpmProvider,
 }
 
-func GetProvider(tool models.Tool) (Provider, error) {
+func GetProvider(tool models.Tool, logger loggers.Logger) (Provider, error) {
 	kind, ok := tool.Recipe["kind"]
 	if !ok {
 		return &ErrProvider{}, fmt.Errorf("unable to get the tool's recipe kind")
 	}
 
 	if constructors, ok := providersConstructors[fmt.Sprint(kind)]; ok {
-		return constructors(tool), nil
+		return constructors(tool, logger), nil
 	}
 	return &ErrProvider{}, fmt.Errorf("Invalid recipe kind: %s", kind)
 }

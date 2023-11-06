@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/Mth-Ryan/lspcli/internal/utils"
+	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 )
 
 type GithubRealease struct {
@@ -40,12 +41,14 @@ type GithubReleaseWithAssets struct {
 type GithubReleaseHandler struct {
 	baseUrl    string
 	apiVersion string
+	logger     loggers.Logger
 }
 
-func NewGitReleaseHandler() *GithubReleaseHandler {
+func NewGitReleaseHandler(logger loggers.Logger) *GithubReleaseHandler {
 	return &GithubReleaseHandler{
 		baseUrl:    "https://api.github.com",
 		apiVersion: "2022-11-28",
+		logger:     logger,
 	}
 }
 
@@ -78,8 +81,14 @@ func (g *GithubReleaseHandler) getJson(p string, out any) error {
 }
 
 func (g *GithubReleaseHandler) LatestVersion(repo string) (GithubRealease, error) {
+	g.logger.Log("Trying to get the latest release tag for: https://github.com/%s", repo)
+
 	release := &GithubRealease{}
 	err := g.getJson(fmt.Sprintf("/repos/%s/releases/latest", repo), release)
+
+	if err == nil {
+		g.logger.Log("Release tag found: %s", release.TagName)
+	}
 
 	return *release, err
 }
@@ -95,8 +104,14 @@ func (g *GithubReleaseHandler) LatestVersionWithAssets(repo string) (GithubRelea
 		return release, err
 	}
 
+	g.logger.Log("Finding the %s assets", release.TagName)
+
 	err = g.getJson(fmt.Sprintf("/repos/%s/releases/%d/assets", repo, rawRelease.ID), assets)
 	release.Assets = *assets
+
+	if err == nil {
+		g.logger.Log("Assets found")
+	}
 
 	return release, err
 }
@@ -133,8 +148,16 @@ func (g *GithubReleaseHandler) DownloadAssetFromLatestVersion(repo string, asset
 	}
 	if err != nil {
 		return withAsset, err
+	} else {
+		g.logger.Log("Target asset found: %s", asset.Name)
 	}
 
+	g.logger.Log("Downloading asset from: %s...", asset.BrowserDownloadUrl)
 	err = downloadFile(filepath, asset.BrowserDownloadUrl)
+
+	if err != nil {
+		g.logger.Log("Download completed successfully")
+	}
+
 	return withAsset, err
 }

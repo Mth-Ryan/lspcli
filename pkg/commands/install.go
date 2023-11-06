@@ -28,7 +28,7 @@ func (d *InstallCommand) Run(id string) error {
 		return err
 	}
 
-	provider, err := providers.GetProvider(tool)
+	provider, err := providers.GetProvider(tool, d.logger)
 	if err != nil {
 		return err
 	}

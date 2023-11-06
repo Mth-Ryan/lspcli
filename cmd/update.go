@@ -45,14 +45,18 @@ var updateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		quietOut, _ := cmd.Flags().GetBool("quiet")
 		jsonOut, _ := cmd.Flags().GetBool("json")
 		runtimePath, _ := cmd.Flags().GetString("runtime")
 
 		toolsReader := tools.NewRuntimeReader(runtimePath)
 		var resultWriter result.Writer = result.NewPlainWriter()
 		var logger loggers.Logger = loggers.NewStdOutLogger()
+
 		if jsonOut {
 			resultWriter = result.NewJsonWriter()
+			logger = loggers.NewQuietLogger()
+		} else if quietOut {
 			logger = loggers.NewQuietLogger()
 		}
 
@@ -76,4 +80,5 @@ func init() {
 	// is called directly, e.g.:
 	// updateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 	updateCmd.Flags().BoolP("json", "j", false, "Send the output as a json object")
+	updateCmd.Flags().BoolP("quiet", "q", false, "Supress the logging messages")
 }

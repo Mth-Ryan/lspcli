@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/providers"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 )
@@ -23,7 +24,7 @@ func (d *DescribeCommand) Run(id string) error {
 		return err
 	}
 
-	provider, err := providers.GetProvider(tool)
+	provider, err := providers.GetProvider(tool, loggers.NewQuietLogger())
 	if err != nil {
 		return err
 	}

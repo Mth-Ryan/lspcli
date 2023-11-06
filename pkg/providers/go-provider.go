@@ -3,6 +3,7 @@ package providers
 import (
 	"fmt"
 
+	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/recipes"
 )
@@ -12,7 +13,7 @@ type GoProvider struct {
 	recipeParser *recipes.GoRecipeParser
 }
 
-func NewGoProvider(tool models.Tool) Provider {
+func NewGoProvider(tool models.Tool, logger loggers.Logger) Provider {
 	return &GoProvider{
 		tool:         tool,
 		recipeParser: recipes.NewGoRecipeParser(),

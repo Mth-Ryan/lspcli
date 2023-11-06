@@ -47,6 +47,7 @@ Check the dependencies of the tool before call install.`,
 			os.Exit(1)
 		}
 
+		quietOut, _ := cmd.Flags().GetBool("quiet")
 		jsonOut, _ := cmd.Flags().GetBool("json")
 		runtimePath, _ := cmd.Flags().GetString("runtime")
 
@@ -55,6 +56,8 @@ Check the dependencies of the tool before call install.`,
 		var logger loggers.Logger = loggers.NewStdOutLogger()
 		if jsonOut {
 			resultWriter = result.NewJsonWriter()
+			logger = loggers.NewQuietLogger()
+		} else if quietOut {
 			logger = loggers.NewQuietLogger()
 		}
 
@@ -77,5 +80,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// installCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	installCmd.Flags().BoolP("quiet", "q", false, "Supress the logging messages")
 	installCmd.Flags().BoolP("json", "j", false, "Send the output as a json object")
 }

@@ -13,7 +13,7 @@ func NewStdOutLogger() *StdOutLogger {
 }
 
 func (l *StdOutLogger) Log(format string, args ...any) {
-	fmt.Printf(format, args...)
+	fmt.Printf(format+"\n", args...)
 }
 
 type QuietLogger struct{}

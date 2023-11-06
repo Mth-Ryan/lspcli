@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/Mth-Ryan/lspcli/pkg/handlers"
+	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/recipes"
 )
@@ -18,11 +19,11 @@ func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
 	return e.recipeParser.Parse(e.tool.Recipe)
 }
 
-func NewGitReleaseProvider(tool models.Tool) Provider {
+func NewGitReleaseProvider(tool models.Tool, logger loggers.Logger) Provider {
 	return &GitReleaseProvider{
 		tool:         tool,
 		recipeParser: recipes.NewGitReleaseRecipeParser(),
-		handler:      handlers.NewGitReleaseHandler(),
+		handler:      handlers.NewGitReleaseHandler(logger),
 	}
 }
 
