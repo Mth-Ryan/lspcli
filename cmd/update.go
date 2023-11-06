@@ -22,9 +22,12 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/Mth-Ryan/lspcli/pkg/commands"
+	"github.com/Mth-Ryan/lspcli/pkg/loggers"
+	"github.com/Mth-Ryan/lspcli/pkg/result"
+	"github.com/Mth-Ryan/lspcli/pkg/tools"
 	"github.com/spf13/cobra"
 )
 
@@ -42,7 +45,21 @@ var updateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		fmt.Println("update called")
+		jsonOut, _ := cmd.Flags().GetBool("json")
+		runtimePath, _ := cmd.Flags().GetString("runtime")
+
+		toolsReader := tools.NewRuntimeReader(runtimePath)
+		var resultWriter result.Writer = result.NewPlainWriter()
+		var logger loggers.Logger = loggers.NewStdOutLogger()
+		if jsonOut {
+			resultWriter = result.NewJsonWriter()
+			logger = loggers.NewQuietLogger()
+		}
+
+		command := commands.NewUpdateCommand(toolsReader, resultWriter, logger)
+
+		id := args[0]
+		command.Run(id)
 	},
 }
 

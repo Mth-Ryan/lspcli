@@ -8,21 +8,21 @@ import (
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 )
 
-type InstallCommand struct {
+type RemoveCommand struct {
 	reader       tools.Reader
 	resultWriter result.Writer
 	logger       loggers.Logger
 }
 
-func NewInstallCommand(reader tools.Reader, resultWriter result.Writer, logger loggers.Logger) *InstallCommand {
-	return &InstallCommand{
+func NewRemoveCommand(reader tools.Reader, resultWriter result.Writer, logger loggers.Logger) *RemoveCommand {
+	return &RemoveCommand{
 		reader,
 		resultWriter,
 		logger,
 	}
 }
 
-func (d *InstallCommand) Run(id string) error {
+func (d *RemoveCommand) Run(id string) error {
 	tool, err := d.reader.Get(id)
 	if err != nil {
 		return err

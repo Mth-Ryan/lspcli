@@ -15,18 +15,22 @@ type Writer interface {
 type PlainWriter struct {
 	errFmt     func(string, ...any)
 	successFmt func(string, ...any)
+	noOpFmt    func(string, ...any)
 }
 
 func NewPlainWriter() *PlainWriter {
 	return &PlainWriter{
 		errFmt:     color.New(color.FgRed).PrintfFunc(),
 		successFmt: color.New(color.FgGreen).PrintfFunc(),
+		noOpFmt:    color.New(color.FgYellow).PrintfFunc(),
 	}
 }
 
 func (w *PlainWriter) Write(result models.Result) {
 	if result.Kind == models.RESULT_OK {
 		w.successFmt("%s\n", result.Message)
+	} else if result.Kind == models.RESULT_NO_OP {
+		w.noOpFmt("%s\n", result.Message)
 	} else {
 		w.errFmt("Error: %s.\n", result.Message)
 	}

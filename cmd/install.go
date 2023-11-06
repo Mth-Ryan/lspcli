@@ -25,6 +25,7 @@ import (
 	"os"
 
 	"github.com/Mth-Ryan/lspcli/pkg/commands"
+	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/result"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 	"github.com/spf13/cobra"
@@ -51,11 +52,13 @@ Check the dependencies of the tool before call install.`,
 
 		toolsReader := tools.NewRuntimeReader(runtimePath)
 		var resultWriter result.Writer = result.NewPlainWriter()
+		var logger loggers.Logger = loggers.NewStdOutLogger()
 		if jsonOut {
 			resultWriter = result.NewJsonWriter()
+			logger = loggers.NewQuietLogger()
 		}
 
-		command := commands.NewInstallCommand(toolsReader, resultWriter)
+		command := commands.NewInstallCommand(toolsReader, resultWriter, logger)
 
 		id := args[0]
 		command.Run(id)
