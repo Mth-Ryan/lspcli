@@ -5,17 +5,25 @@ import (
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/providers"
 	"github.com/Mth-Ryan/lspcli/pkg/result"
+	"github.com/Mth-Ryan/lspcli/pkg/runtime"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 )
 
 type UpdateCommand struct {
+	runtimeConf  *runtime.Conf
 	reader       tools.Reader
 	resultWriter result.Writer
 	logger       loggers.Logger
 }
 
-func NewUpdateCommand(reader tools.Reader, resultWriter result.Writer, logger loggers.Logger) *UpdateCommand {
+func NewUpdateCommand(
+	runtimeConf *runtime.Conf,
+	reader tools.Reader,
+	resultWriter result.Writer,
+	logger loggers.Logger,
+) *UpdateCommand {
 	return &UpdateCommand{
+		runtimeConf,
 		reader,
 		resultWriter,
 		logger,

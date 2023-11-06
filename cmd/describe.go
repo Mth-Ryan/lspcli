@@ -22,10 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"os"
-
+	"github.com/Mth-Ryan/lspcli/cmd/utils"
 	"github.com/Mth-Ryan/lspcli/pkg/commands"
-	"github.com/Mth-Ryan/lspcli/pkg/tools"
 	"github.com/spf13/cobra"
 )
 
@@ -41,22 +39,13 @@ description, etc. Examples:
   lspcli describe omnisharp		
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			cmd.Help()
-			os.Exit(1)
-		}
+		utils.SupplyArgsOrHelp(cmd, args, 1)
 
-		jsonOut, _ := cmd.Flags().GetBool("json")
-		runtimePath, _ := cmd.Flags().GetString("runtime")
+		dependencies := utils.GetShowActionDependencies(cmd)
 
-		var toolsWriter tools.Writer = tools.NewTableWriter()
-		if jsonOut {
-			toolsWriter = tools.NewJsonWriter()
-		}
-		toolsReader := tools.NewRuntimeReader(runtimePath)
 		describeCommand := commands.NewDescribeCommand(
-			toolsReader,
-			toolsWriter,
+			dependencies.ToolsReader,
+			dependencies.ToolsWriter,
 		)
 
 		id := args[0]

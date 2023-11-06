@@ -5,17 +5,25 @@ import (
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/providers"
 	"github.com/Mth-Ryan/lspcli/pkg/result"
+	"github.com/Mth-Ryan/lspcli/pkg/runtime"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 )
 
 type RemoveCommand struct {
+	runtimeConf  *runtime.Conf
 	reader       tools.Reader
 	resultWriter result.Writer
 	logger       loggers.Logger
 }
 
-func NewRemoveCommand(reader tools.Reader, resultWriter result.Writer, logger loggers.Logger) *RemoveCommand {
+func NewRemoveCommand(
+	runtimeConf *runtime.Conf,
+	reader tools.Reader,
+	resultWriter result.Writer,
+	logger loggers.Logger,
+) *RemoveCommand {
 	return &RemoveCommand{
+		runtimeConf,
 		reader,
 		resultWriter,
 		logger,

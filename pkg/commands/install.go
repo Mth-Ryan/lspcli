@@ -5,17 +5,25 @@ import (
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/providers"
 	"github.com/Mth-Ryan/lspcli/pkg/result"
+	"github.com/Mth-Ryan/lspcli/pkg/runtime"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 )
 
 type InstallCommand struct {
+	runtimeConf  *runtime.Conf
 	reader       tools.Reader
 	resultWriter result.Writer
 	logger       loggers.Logger
 }
 
-func NewInstallCommand(reader tools.Reader, resultWriter result.Writer, logger loggers.Logger) *InstallCommand {
+func NewInstallCommand(
+	runtimeConf *runtime.Conf,
+	reader tools.Reader,
+	resultWriter result.Writer,
+	logger loggers.Logger,
+) *InstallCommand {
 	return &InstallCommand{
+		runtimeConf,
 		reader,
 		resultWriter,
 		logger,

@@ -22,12 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"os"
-
+	"github.com/Mth-Ryan/lspcli/cmd/utils"
 	"github.com/Mth-Ryan/lspcli/pkg/commands"
-	"github.com/Mth-Ryan/lspcli/pkg/loggers"
-	"github.com/Mth-Ryan/lspcli/pkg/result"
-	"github.com/Mth-Ryan/lspcli/pkg/tools"
 	"github.com/spf13/cobra"
 )
 
@@ -40,27 +36,16 @@ var updateCmd = &cobra.Command{
   lspcli update typescript-language-server
   lspcli update omnisharp`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			cmd.Help()
-			os.Exit(1)
-		}
+		utils.SupplyArgsOrHelp(cmd, args, 1)
 
-		quietOut, _ := cmd.Flags().GetBool("quiet")
-		jsonOut, _ := cmd.Flags().GetBool("json")
-		runtimePath, _ := cmd.Flags().GetString("runtime")
+		dependencies := utils.GetCommitActionDependencies(cmd)
 
-		toolsReader := tools.NewRuntimeReader(runtimePath)
-		var resultWriter result.Writer = result.NewPlainWriter()
-		var logger loggers.Logger = loggers.NewStdOutLogger()
-
-		if jsonOut {
-			resultWriter = result.NewJsonWriter()
-			logger = loggers.NewQuietLogger()
-		} else if quietOut {
-			logger = loggers.NewQuietLogger()
-		}
-
-		command := commands.NewUpdateCommand(toolsReader, resultWriter, logger)
+		command := commands.NewUpdateCommand(
+			dependencies.RuntimeConf,
+			dependencies.ToolsReader,
+			dependencies.ResultWriter,
+			dependencies.Logger,
+		)
 
 		id := args[0]
 		command.Run(id)
