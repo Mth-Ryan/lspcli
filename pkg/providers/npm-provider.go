@@ -6,6 +6,7 @@ import (
 	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/recipes"
+	"github.com/Mth-Ryan/lspcli/pkg/runtime"
 )
 
 type NpmProvider struct {
@@ -13,7 +14,7 @@ type NpmProvider struct {
 	recipeParser *recipes.NpmRecipeParser
 }
 
-func NewNpmProvider(tool models.Tool, logger loggers.Logger) Provider {
+func NewNpmProvider(runConf runtime.Conf, tool models.Tool, logger loggers.Logger) Provider {
 	return &NpmProvider{
 		tool,
 		recipes.NewNpmRecipeParser(),

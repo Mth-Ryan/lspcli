@@ -47,6 +47,7 @@ func GetCommitActionDependencies(cmd *cobra.Command) CommitActionDependencies {
 }
 
 type ShowActionDependencies struct {
+	RuntimeConf *runtime.Conf
 	ToolsReader tools.Reader
 	ToolsWriter tools.Writer
 }
@@ -56,6 +57,7 @@ func GetShowActionDependencies(cmd *cobra.Command) ShowActionDependencies {
 	runtimePath, _ := cmd.Flags().GetString("runtime")
 
 	dependencies := ShowActionDependencies{
+		RuntimeConf: runtime.NewConf(runtimePath),
 		ToolsReader: tools.NewRuntimeReader(runtimePath),
 		ToolsWriter: tools.NewTableWriter(),
 	}

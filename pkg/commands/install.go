@@ -36,7 +36,7 @@ func (d *InstallCommand) Run(id string) error {
 		return err
 	}
 
-	provider, err := providers.GetProvider(tool, d.logger)
+	provider, err := providers.GetProvider(*d.runtimeConf, tool, d.logger)
 	if err != nil {
 		return err
 	}

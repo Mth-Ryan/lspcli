@@ -44,6 +44,7 @@ description, etc. Examples:
 		dependencies := utils.GetShowActionDependencies(cmd)
 
 		describeCommand := commands.NewDescribeCommand(
+			dependencies.RuntimeConf,
 			dependencies.ToolsReader,
 			dependencies.ToolsWriter,
 		)

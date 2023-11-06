@@ -6,6 +6,7 @@ import (
 	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/recipes"
+	"github.com/Mth-Ryan/lspcli/pkg/runtime"
 )
 
 type GoProvider struct {
@@ -13,7 +14,7 @@ type GoProvider struct {
 	recipeParser *recipes.GoRecipeParser
 }
 
-func NewGoProvider(tool models.Tool, logger loggers.Logger) Provider {
+func NewGoProvider(runConf runtime.Conf, tool models.Tool, logger loggers.Logger) Provider {
 	return &GoProvider{
 		tool:         tool,
 		recipeParser: recipes.NewGoRecipeParser(),

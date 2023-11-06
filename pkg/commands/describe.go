@@ -3,16 +3,19 @@ package commands
 import (
 	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/providers"
+	"github.com/Mth-Ryan/lspcli/pkg/runtime"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 )
 
 type DescribeCommand struct {
-	reader tools.Reader
-	writer tools.Writer
+	runtimeConf *runtime.Conf
+	reader      tools.Reader
+	writer      tools.Writer
 }
 
-func NewDescribeCommand(reader tools.Reader, writer tools.Writer) *DescribeCommand {
+func NewDescribeCommand(runtimeConf *runtime.Conf, reader tools.Reader, writer tools.Writer) *DescribeCommand {
 	return &DescribeCommand{
+		runtimeConf,
 		reader,
 		writer,
 	}
@@ -24,7 +27,7 @@ func (d *DescribeCommand) Run(id string) error {
 		return err
 	}
 
-	provider, err := providers.GetProvider(tool, loggers.NewQuietLogger())
+	provider, err := providers.GetProvider(*d.runtimeConf, tool, loggers.NewQuietLogger())
 	if err != nil {
 		return err
 	}

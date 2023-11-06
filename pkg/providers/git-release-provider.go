@@ -7,6 +7,7 @@ import (
 	"github.com/Mth-Ryan/lspcli/pkg/loggers"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
 	"github.com/Mth-Ryan/lspcli/pkg/recipes"
+	"github.com/Mth-Ryan/lspcli/pkg/runtime"
 )
 
 type GitReleaseProvider struct {
@@ -19,7 +20,7 @@ func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
 	return e.recipeParser.Parse(e.tool.Recipe)
 }
 
-func NewGitReleaseProvider(tool models.Tool, logger loggers.Logger) Provider {
+func NewGitReleaseProvider(runConf runtime.Conf, tool models.Tool, logger loggers.Logger) Provider {
 	return &GitReleaseProvider{
 		tool:         tool,
 		recipeParser: recipes.NewGitReleaseRecipeParser(),
