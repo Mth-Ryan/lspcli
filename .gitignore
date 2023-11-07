@@ -25,6 +25,7 @@ lspcli
 
 # runtime installs
 
+runtime/installs-list
 runtime/installs
 runtime/bin
 runtime/cache
