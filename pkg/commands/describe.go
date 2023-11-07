@@ -37,7 +37,7 @@ func (d *DescribeCommand) Run(id string) error {
 		return err
 	}
 
-	installedVersion, err := provider.InstaledVersion()
+	installedVersion, err := provider.InstalledVersion()
 	if err != nil {
 		return err
 	}

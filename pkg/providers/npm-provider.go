@@ -46,6 +46,6 @@ func (e *NpmProvider) LatestVersion() (string, error) {
 	return "", nil
 }
 
-func (e *NpmProvider) InstaledVersion() (string, error) {
+func (e *NpmProvider) InstalledVersion() (string, error) {
 	return "", nil
 }

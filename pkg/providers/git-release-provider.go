@@ -186,7 +186,7 @@ func (e *GitReleaseProvider) LatestVersion() (string, error) {
 	return release.TagName, err
 }
 
-func (e *GitReleaseProvider) InstaledVersion() (string, error) {
+func (e *GitReleaseProvider) InstalledVersion() (string, error) {
 	installs, err := e.installsListHandler.GetInstalls()
 	if err != nil {
 		return "", err

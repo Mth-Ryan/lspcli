@@ -13,7 +13,7 @@ type Provider interface {
 	Update() error
 	Remove() error
 	LatestVersion() (string, error)
-	InstaledVersion() (string, error)
+	InstalledVersion() (string, error)
 }
 
 type ProviderConstructor = func(runtime.Conf, models.Tool, loggers.Logger) Provider

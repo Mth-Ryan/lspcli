@@ -18,6 +18,10 @@ func (e *ErrProvider) LatestVersion() (string, error) {
 	return "", nil
 }
 
-func (e *ErrProvider) InstaledVersion() (string, error) {
+func (e *ErrProvider) InstalledVersion() (string, error) {
 	return "", nil
+}
+
+func (e *ErrProvider) InstalledVersions() (map[string](*string), error) {
+	return map[string](*string){}, nil
 }

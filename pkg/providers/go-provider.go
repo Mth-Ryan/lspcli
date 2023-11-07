@@ -46,6 +46,6 @@ func (e *GoProvider) LatestVersion() (string, error) {
 	return "", nil
 }
 
-func (e *GoProvider) InstaledVersion() (string, error) {
+func (e *GoProvider) InstalledVersion() (string, error) {
 	return "", nil
 }
