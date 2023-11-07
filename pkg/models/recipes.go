@@ -28,6 +28,7 @@ type NpmRecipe struct {
 type GitReleaseRecipe struct {
 	Recipe          `mapstructure:",squash"`
 	Repository      string `json:"repository" yaml:"repository" mapstructure:"repository"`
+	BinaryName      string `json:"binary_name" yaml:"binary_name" mapstructure:"binary_name"`
 	BinaryInnerPath string `json:"binary_inner_path" yaml:"binary_inner_path" mapstructure:"binary_inner_path"`
 	Package         string `json:"package" yaml:"package" mapstructure:"package"`
 }

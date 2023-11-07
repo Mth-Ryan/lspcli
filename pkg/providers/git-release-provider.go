@@ -12,12 +12,14 @@ import (
 )
 
 type GitReleaseProvider struct {
-	tool           models.Tool
-	runtimeConf    runtime.Conf
-	recipeParser   *recipes.GitReleaseRecipeParser
-	handler        *handlers.GithubReleaseHandler
-	logger         loggers.Logger
-	archiveFactory handlers.ArchiveHandlerFactory
+	tool                  models.Tool
+	runtimeConf           runtime.Conf
+	logger                loggers.Logger
+	recipeParser          *recipes.GitReleaseRecipeParser
+	handler               *handlers.GithubReleaseHandler
+	archiveFactory        handlers.ArchiveHandlerFactory
+	linkHandler           handlers.LinkHander
+	execPermissionHandler handlers.ExecPermissionHandler
 }
 
 func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
@@ -27,12 +29,14 @@ func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
 func NewGitReleaseProvider(runConf runtime.Conf, tool models.Tool, logger loggers.Logger) Provider {
 
 	return &GitReleaseProvider{
-		tool:           tool,
-		runtimeConf:    runConf,
-		recipeParser:   recipes.NewGitReleaseRecipeParser(),
-		handler:        handlers.NewGitReleaseHandler(logger),
-		logger:         logger,
-		archiveFactory: handlers.NewNativeArchiveHandlerFactory(),
+		tool:                  tool,
+		runtimeConf:           runConf,
+		logger:                logger,
+		recipeParser:          recipes.NewGitReleaseRecipeParser(),
+		handler:               handlers.NewGitReleaseHandler(logger),
+		archiveFactory:        handlers.NewNativeArchiveHandlerFactory(),
+		linkHandler:           handlers.NewSymbolicLinkHandler(),
+		execPermissionHandler: handlers.NewUnixExecPermissionHandler(),
 	}
 }
 
@@ -61,8 +65,23 @@ func (e *GitReleaseProvider) Install() error {
 		return err
 	}
 
+	e.logger.Log("Extracting the release asset")
 	installPath := path.Join(e.runtimeConf.InstallsPath(), e.tool.ID)
 	err = archiveHandler.Extract(cachedAsset, installPath)
+	if err != nil {
+		return err
+	}
+
+	e.logger.Log("Setting the binary exec permission")
+	originalBinaryPath := path.Join(installPath, recipe.BinaryInnerPath)
+	err = e.execPermissionHandler.SetPermission(originalBinaryPath)
+	if err != nil {
+		return err
+	}
+
+	e.logger.Log("Creating the main binary symbolic link")
+	linkBinaryPath := path.Join(e.runtimeConf.BinPath(), recipe.BinaryName)
+	err = e.linkHandler.CreateLink(originalBinaryPath, linkBinaryPath)
 	if err != nil {
 		return err
 	}
