@@ -4,19 +4,27 @@ import (
 	"strings"
 
 	"github.com/Mth-Ryan/lspcli/internal/utils"
+	"github.com/Mth-Ryan/lspcli/pkg/handlers"
 	"github.com/Mth-Ryan/lspcli/pkg/models"
+	"github.com/Mth-Ryan/lspcli/pkg/runtime"
 	"github.com/Mth-Ryan/lspcli/pkg/tools"
 )
 
 type ListCommand struct {
-	reader tools.Reader
-	writer tools.Writer
+	runtimeConf      runtime.Conf
+	reader           tools.Reader
+	writer           tools.Writer
+	installedHandler handlers.InstallsListHandler
 }
 
-func NewListCommand(reader tools.Reader, writer tools.Writer) *ListCommand {
+func NewListCommand(runtimeConf runtime.Conf, reader tools.Reader, writer tools.Writer) *ListCommand {
+	installedHandler := handlers.NewJsonInstallsHandler(runtimeConf)
+
 	return &ListCommand{
+		runtimeConf,
 		reader,
 		writer,
+		installedHandler,
 	}
 }
 
@@ -26,7 +34,7 @@ func (l *ListCommand) createFilter(installed bool, kind string, lang string) fun
 		pass := true
 
 		if installed {
-			pass = pass && t.LatestVersion != nil
+			pass = pass && t.InstalledVersion != nil
 		}
 
 		if kind != "" {
@@ -50,9 +58,25 @@ func (l *ListCommand) Run(installed bool, kind string, lang string) error {
 		return err
 	}
 
+	installedList, err := l.installedHandler.GetInstalls()
+	if err != nil {
+		return err
+	}
+
 	where := l.createFilter(installed, kind, lang)
 
-	l.writer.WriteAll(utils.Filter(tools, where))
+	newTools := utils.Map(tools, func(t models.Tool) models.Tool {
+		newTool := t
+		if version, ok := installedList[t.ID]; ok {
+			newTool.InstalledVersion = version
+		} else {
+			newTool.InstalledVersion = nil
+		}
+
+		return newTool
+	})
+
+	l.writer.WriteAll(utils.Filter(newTools, where))
 
 	return nil
 }

@@ -42,6 +42,7 @@ You also can also return the output as json with the json flag.`,
 		dependencies := utils.GetShowActionDependencies(cmd)
 
 		listCommand := commands.NewListCommand(
+			*dependencies.RuntimeConf,
 			dependencies.ToolsReader,
 			dependencies.ToolsWriter,
 		)
