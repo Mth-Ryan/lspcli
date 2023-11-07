@@ -20,6 +20,7 @@ type GitReleaseProvider struct {
 	archiveFactory        handlers.ArchiveHandlerFactory
 	linkHandler           handlers.LinkHander
 	execPermissionHandler handlers.ExecPermissionHandler
+	installsListHandler   handlers.InstallsListHandler
 }
 
 func (e *GitReleaseProvider) getRecipe() (*models.GitReleaseRecipe, error) {
@@ -37,6 +38,7 @@ func NewGitReleaseProvider(runConf runtime.Conf, tool models.Tool, logger logger
 		archiveFactory:        handlers.NewNativeArchiveHandlerFactory(),
 		linkHandler:           handlers.NewSymbolicLinkHandler(),
 		execPermissionHandler: handlers.NewUnixExecPermissionHandler(),
+		installsListHandler:   handlers.NewJsonInstallsHandler(runConf),
 	}
 }
 
@@ -60,14 +62,14 @@ func (e *GitReleaseProvider) removingRelease(recipe *models.GitReleaseRecipe) er
 	return os.RemoveAll(installPath)
 }
 
-func (e *GitReleaseProvider) downloadLatestVersion(recipe *models.GitReleaseRecipe) error {
+func (e *GitReleaseProvider) downloadLatestVersion(recipe *models.GitReleaseRecipe) (string, error) {
 	cachedAsset := path.Join(e.runtimeConf.CachePath(), recipe.Package)
-	_, err := e.handler.DownloadAssetFromLatestVersion(
+	release, err := e.handler.DownloadAssetFromLatestVersion(
 		recipe.Repository,
 		recipe.Package,
 		cachedAsset,
 	)
-	return err
+	return release.TagName, err
 }
 
 func (e *GitReleaseProvider) extractAndSetBinLink(recipe *models.GitReleaseRecipe) error {
@@ -110,12 +112,17 @@ func (e *GitReleaseProvider) Install() error {
 
 	e.removingCachedIfExists(recipe)
 
-	err = e.downloadLatestVersion(recipe)
+	version, err := e.downloadLatestVersion(recipe)
 	if err != nil {
 		return err
 	}
 
-	return e.extractAndSetBinLink(recipe)
+	err = e.extractAndSetBinLink(recipe)
+	if err != nil {
+		return err
+	}
+
+	return e.installsListHandler.SetVersion(e.tool.ID, &version)
 }
 
 func (e *GitReleaseProvider) Update() error {
@@ -126,7 +133,7 @@ func (e *GitReleaseProvider) Update() error {
 
 	e.removingCachedIfExists(recipe)
 
-	err = e.downloadLatestVersion(recipe)
+	version, err := e.downloadLatestVersion(recipe)
 	if err != nil {
 		return err
 	}
@@ -141,7 +148,12 @@ func (e *GitReleaseProvider) Update() error {
 		return err
 	}
 
-	return e.extractAndSetBinLink(recipe)
+	err = e.extractAndSetBinLink(recipe)
+	if err != nil {
+		return err
+	}
+
+	return e.installsListHandler.SetVersion(e.tool.ID, &version)
 }
 
 func (e *GitReleaseProvider) Remove() error {
@@ -155,7 +167,13 @@ func (e *GitReleaseProvider) Remove() error {
 	if err != nil {
 		return err
 	}
-	return e.removingRelease(recipe)
+
+	err = e.removingRelease(recipe)
+	if err != nil {
+		return err
+	}
+
+	return e.installsListHandler.SetVersion(e.tool.ID, nil)
 }
 
 func (e *GitReleaseProvider) LatestVersion() (string, error) {
@@ -169,5 +187,16 @@ func (e *GitReleaseProvider) LatestVersion() (string, error) {
 }
 
 func (e *GitReleaseProvider) InstaledVersion() (string, error) {
+	installs, err := e.installsListHandler.GetInstalls()
+	if err != nil {
+		return "", err
+	}
+
+	if version, ok := installs[e.tool.ID]; ok {
+		if version != nil {
+			return *version, nil
+		}
+	}
+
 	return "", nil
 }
