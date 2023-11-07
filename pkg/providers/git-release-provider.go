@@ -60,22 +60,18 @@ func (e *GitReleaseProvider) removingRelease(recipe *models.GitReleaseRecipe) er
 	return os.RemoveAll(installPath)
 }
 
-func (e *GitReleaseProvider) Install() error {
-	recipe, err := e.getRecipe()
-	if err != nil {
-		return err
-	}
-
-	cachedAsset := e.removingCachedIfExists(recipe)
-
-	_, err = e.handler.DownloadAssetFromLatestVersion(
+func (e *GitReleaseProvider) downloadLatestVersion(recipe *models.GitReleaseRecipe) error {
+	cachedAsset := path.Join(e.runtimeConf.CachePath(), recipe.Package)
+	_, err := e.handler.DownloadAssetFromLatestVersion(
 		recipe.Repository,
 		recipe.Package,
 		cachedAsset,
 	)
-	if err != nil {
-		return err
-	}
+	return err
+}
+
+func (e *GitReleaseProvider) extractAndSetBinLink(recipe *models.GitReleaseRecipe) error {
+	cachedAsset := path.Join(e.runtimeConf.CachePath(), recipe.Package)
 
 	archiveHandler, err := e.archiveFactory.GetHandler(recipe.Package)
 	if err != nil {
@@ -106,19 +102,31 @@ func (e *GitReleaseProvider) Install() error {
 	return nil
 }
 
+func (e *GitReleaseProvider) Install() error {
+	recipe, err := e.getRecipe()
+	if err != nil {
+		return err
+	}
+
+	e.removingCachedIfExists(recipe)
+
+	err = e.downloadLatestVersion(recipe)
+	if err != nil {
+		return err
+	}
+
+	return e.extractAndSetBinLink(recipe)
+}
+
 func (e *GitReleaseProvider) Update() error {
 	recipe, err := e.getRecipe()
 	if err != nil {
 		return err
 	}
 
-	cachedAsset := e.removingCachedIfExists(recipe)
+	e.removingCachedIfExists(recipe)
 
-	_, err = e.handler.DownloadAssetFromLatestVersion(
-		recipe.Repository,
-		recipe.Package,
-		cachedAsset,
-	)
+	err = e.downloadLatestVersion(recipe)
 	if err != nil {
 		return err
 	}
@@ -133,33 +141,7 @@ func (e *GitReleaseProvider) Update() error {
 		return err
 	}
 
-	archiveHandler, err := e.archiveFactory.GetHandler(recipe.Package)
-	if err != nil {
-		return err
-	}
-
-	e.logger.Log("Extracting the release asset")
-	installPath := path.Join(e.runtimeConf.InstallsPath(), e.tool.ID)
-	err = archiveHandler.Extract(cachedAsset, installPath)
-	if err != nil {
-		return err
-	}
-
-	e.logger.Log("Setting the binary exec permission")
-	originalBinaryPath := path.Join(installPath, recipe.BinaryInnerPath)
-	err = e.execPermissionHandler.SetPermission(originalBinaryPath)
-	if err != nil {
-		return err
-	}
-
-	e.logger.Log("Creating the main binary symbolic link")
-	linkBinaryPath := path.Join(e.runtimeConf.BinPath(), recipe.BinaryName)
-	err = e.linkHandler.CreateLink(originalBinaryPath, linkBinaryPath)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return e.extractAndSetBinLink(recipe)
 }
 
 func (e *GitReleaseProvider) Remove() error {
