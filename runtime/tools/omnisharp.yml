@@ -6,7 +6,7 @@ description: |
   and C# language services to various IDEs and plugins.
 url: https://github.com/OmniSharp/omnisharp-roslyn
 dependencies:
-  - curl
+  - tar
   - .Net >= 6.0
 languages:
   - C#
@@ -16,7 +16,7 @@ recipe:
   binary_name: OmniSharp
   binary_inner_path: OmniSharp
   package: |
-    omnisharp-{{.OS}}-{{.Arch}}-net6.0.zip
+    omnisharp-{{.OS}}-{{.Arch}}-net6.0.tar.gz
   context_replaces:
     OS:
       windows: win

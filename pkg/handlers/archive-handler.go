@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -60,6 +61,11 @@ func NewTarHandler(filename string) *TarHandler {
 }
 
 func (h *TarHandler) Extract(archivePath string, outputPath string) error {
+	err := os.MkdirAll(outputPath, 0755)
+	if err != nil {
+		return err
+	}
+
 	args := []string{"-xf"}
 	switch {
 	case strings.HasSuffix(h.filename, ".gz"):
