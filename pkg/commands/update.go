@@ -44,9 +44,9 @@ func (d *UpdateCommand) Run(id string) error {
 	var kind = models.RESULT_OK
 	var message = ""
 
-	version, err := provider.LatestVersion()
+	err = provider.Update()
 	if err == nil {
-		message = version
+		message = "Tool updated successfully"
 	} else {
 		kind = models.RESULT_ERR
 		message = err.Error()

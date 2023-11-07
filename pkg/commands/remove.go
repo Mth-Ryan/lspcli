@@ -44,9 +44,9 @@ func (d *RemoveCommand) Run(id string) error {
 	var kind = models.RESULT_OK
 	var message = ""
 
-	version, err := provider.LatestVersion()
+	err = provider.Remove()
 	if err == nil {
-		message = version
+		message = "Tool removed successfully"
 	} else {
 		kind = models.RESULT_ERR
 		message = err.Error()
