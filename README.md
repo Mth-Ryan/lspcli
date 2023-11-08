@@ -44,7 +44,7 @@ manually for any other shell and the program will work as expected.
 
 ## How to build for development
 
-You will need the same dependencies of the [installation](#installing). With this dependencies installed, buid the
+You will need the same dependencies of the [installation](#installing). With this dependencies installed, build the
 cli and the scripts:
 
 ```bash
