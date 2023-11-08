@@ -19,53 +19,55 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package cmd
+package commands
 
 import (
-	"github.com/Mth-Ryan/lspcli/cmd/utils"
+	"github.com/Mth-Ryan/lspcli/cmd/lspcli/utils"
 	"github.com/Mth-Ryan/lspcli/pkg/commands"
 	"github.com/spf13/cobra"
 )
 
-// installCmd represents the install command
-var installCmd = &cobra.Command{
-	Use:   "install",
-	Short: "Install a new tool",
-	Long: `You can install any tool available on the cli. Examples:
+// describeCmd represents the describe command
+var describeCmd = &cobra.Command{
+	Use:   "describe",
+	Short: "Describe a tool",
+	Long: `Describe a tool. You can check all informations
+about the tool; latest version, installed version, dependencies,
+description, etc. Examples:
 
-  lspcli install typescript-language-server
-  lspcli install omnisharp
-		
-Check the dependencies of the tool before call install.`,
+  lspcli describe typescript-language-server
+  lspcli describe omnisharp		
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		utils.SupplyArgsOrHelp(cmd, args, 1)
 
-		dependencies := utils.GetCommitActionDependencies(cmd)
+		dependencies := utils.GetShowActionDependencies(cmd)
 
-		command := commands.NewInstallCommand(
+		describeCommand := commands.NewDescribeCommand(
 			dependencies.RuntimeConf,
 			dependencies.ToolsReader,
-			dependencies.ResultWriter,
-			dependencies.Logger,
+			dependencies.ToolsWriter,
 		)
 
 		id := args[0]
-		command.Run(id)
+		err := describeCommand.Run(id)
+		if err != nil {
+			cobra.CheckErr(err)
+		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(installCmd)
+	rootCmd.AddCommand(describeCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// installCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// describeCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// installCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	installCmd.Flags().BoolP("quiet", "q", false, "Supress the logging messages")
-	installCmd.Flags().BoolP("json", "j", false, "Send the output as a json object")
+	// describeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	describeCmd.Flags().BoolP("json", "j", false, "Send the output as a json object")
 }

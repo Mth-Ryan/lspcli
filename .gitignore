@@ -20,8 +20,8 @@
 # Go workspace file
 go.work
 
-# Standad binary
-lspcli
+# Binaries
+bin/
 
 # runtime installs
 

@@ -19,38 +19,39 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package cmd
+package commands
 
 import (
-	"github.com/Mth-Ryan/lspcli/cmd/utils"
+	"github.com/Mth-Ryan/lspcli/cmd/lspcli/utils"
 	"github.com/Mth-Ryan/lspcli/pkg/commands"
 	"github.com/spf13/cobra"
 )
 
-// describeCmd represents the describe command
-var describeCmd = &cobra.Command{
-	Use:   "describe",
-	Short: "Describe a tool",
-	Long: `Describe a tool. You can check all informations
-about the tool; latest version, installed version, dependencies,
-description, etc. Examples:
-
-  lspcli describe typescript-language-server
-  lspcli describe omnisharp		
-`,
+// listCmd represents the list command
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List all available tools",
+	Long: `List all avaliable tools. Examples:
+		
+  lspcli list                   # list all tools
+  lspcli list --lang typescript # list all tools for the typescript language
+  lspcli list --kind lsp        # list all lsp tools
+		
+You also can also return the output as json with the json flag.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		utils.SupplyArgsOrHelp(cmd, args, 1)
-
 		dependencies := utils.GetShowActionDependencies(cmd)
 
-		describeCommand := commands.NewDescribeCommand(
-			dependencies.RuntimeConf,
+		listCommand := commands.NewListCommand(
+			*dependencies.RuntimeConf,
 			dependencies.ToolsReader,
 			dependencies.ToolsWriter,
 		)
 
-		id := args[0]
-		err := describeCommand.Run(id)
+		installed, _ := cmd.Flags().GetBool("installed")
+		kind, _ := cmd.Flags().GetString("kind")
+		lang, _ := cmd.Flags().GetString("lang")
+
+		err := listCommand.Run(installed, kind, lang)
 		if err != nil {
 			cobra.CheckErr(err)
 		}
@@ -58,16 +59,18 @@ description, etc. Examples:
 }
 
 func init() {
-	rootCmd.AddCommand(describeCmd)
+	rootCmd.AddCommand(listCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// describeCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// describeCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	describeCmd.Flags().BoolP("json", "j", false, "Send the output as a json object")
+	listCmd.Flags().String("kind", "", "Show all tools for the specified kind")
+	listCmd.Flags().String("lang", "", "Show all tools for the specified language")
+	listCmd.Flags().Bool("installed", false, "Show only the installed tools")
+	listCmd.Flags().BoolP("json", "j", false, "Send the output as a json object")
 }

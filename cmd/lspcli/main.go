@@ -21,8 +21,8 @@ THE SOFTWARE.
 */
 package main
 
-import "github.com/Mth-Ryan/lspcli/cmd"
+import "github.com/Mth-Ryan/lspcli/cmd/lspcli/commands"
 
 func main() {
-	cmd.Execute()
+	commands.Execute()
 }
