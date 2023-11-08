@@ -25,7 +25,8 @@ bin/
 
 # runtime installs
 
-runtime/installs-list
-runtime/installs
-runtime/bin
-runtime/cache
+runtime/*
+!runtime/tools
+!runtime/bin/.gitkeep
+!runtime/installs/.gitkeep
+!runtime/cache/.gitkeep
