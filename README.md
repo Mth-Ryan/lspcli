@@ -5,7 +5,7 @@ https://github.com/Mth-Ryan/lspcli/assets/46976272/991f917a-ce09-4775-8295-73471
 
 ## Usage
 
-You can see all commands and examples with the `--help` flag. Here some comands examples:
+You can see all commands and examples with the `--help` flag. Here some commands examples:
 ```bash
 lspcli list                               # list all tools
 lspcli install typescript-language-server # install one tool
@@ -14,28 +14,48 @@ lspcli remove tailwind-language-server    # remove one tool
 lspcli describe svelte-language-server    # show all info of one tool
 ```
 
-## How to install
+## Installing
 
-**Comming soon...**
+### From Source:
+
+For the installation you will need some dependencies: `go`, `git` and `GNU Make`:
+```bash
+# Clone this repo:
+git clone https://github.com/Mth-Ryan/lspcli
+
+# Install:
+make install
+
+# You can change the the installation folder (not recommended) using:
+# make install INSTALL_DIR=other_location.
+```
+
+Then, add the respective env script to your shell init file. Example `~/.bashrc` or `~/.zshrc`:
+
+```bash
+. ~/.local/share/lspcli/env.bash # For GNU Bash
+. ~/.local/share/lspcli/env.zsh  # For Zsh
+. ~/.local/share/lspcli/env.ps1  # For Powershell
+```
+
+This will only set the lspcli bin folder to your path, you can do
+manually for any other shell and the program will work as expected.
+  
 
 ## How to build for development
 
-First you need to clone the repository:
+You will need the same dependencies of the [installation](#installing). With this dependencies installed, buid the
+cli and the scripts:
+
 ```bash
+# Clone this repo:
 git clone https://github.com/Mth-Ryan/lspcli
-```
 
-Then Create the runtime folders (This step will not be necessary in the future):
-```bash
-mkdir -p runtime/cache
-mkdir -p runtime/installs
-mkdir -p runtime/bin
-```
+# Build all:
+make # or make all
 
-Finaly build and run the app:
-```bash
-go build                     # build
-./lspcli --runtime ./runtime # running with the working directory runtime
+# Run with the current dir runtime:
+./bin/lspcli --runtime ./runtime
 ```
 
 ## How to contribute
