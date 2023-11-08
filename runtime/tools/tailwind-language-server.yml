@@ -1,0 +1,18 @@
+id: tailwind-language-server
+kind: lsp
+name: Tailwind Language Server
+description: |
+  Language Server Protocol implementation for Tailwind CSS,
+  used by Tailwind CSS IntelliSense for VS Code.
+url: https://github.com/tailwindlabs/tailwindcss-intellisense
+dependencies:
+  - Node.js
+  - npm
+languages:
+  - HTML
+  - Tsx
+  - Jsx
+  - Others
+recipe:
+  kind: npm
+  package: '@tailwindcss/language-server'

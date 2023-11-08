@@ -1,0 +1,14 @@
+id: svelte-language-server
+kind: lsp
+name: Svelte Language Server
+description: |
+  A language server (implementing the language server protocol) for Svelte.
+url: https://github.com/sveltejs/language-tools
+dependencies:
+  - Node.js
+  - npm
+languages:
+  - Svelte
+recipe:
+  kind: npm
+  package: svelte-language-server

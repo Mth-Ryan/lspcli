@@ -1,0 +1,16 @@
+id: vscode-css-languageservice
+kind: lsp
+name: vscode-css-languageservice
+description: |
+  Language services for CSS, LESS and SCSS.
+url: https://github.com/microsoft/vscode-css-languageservice
+dependencies:
+  - Node.js
+  - npm
+languages:
+  - CSS
+  - LESS
+  - SCSS
+recipe:
+  kind: npm
+  package: vscode-css-languageservice

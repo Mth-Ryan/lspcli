@@ -1,0 +1,14 @@
+id: vscode-html-languageservice
+kind: lsp
+name: vscode-html-languageservice
+description: |
+  HTML language service extracted from VSCode to be reused, e.g in the Monaco editor.
+url: https://github.com/microsoft/vscode-html-languageservice
+dependencies:
+  - Node.js
+  - npm
+languages:
+  - HTML
+recipe:
+  kind: npm
+  package: vscode-html-languageservice

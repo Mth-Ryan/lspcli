@@ -1,0 +1,25 @@
+id: zls
+kind: lsp
+name: Zls
+description: |
+  The Zig Language Server (zls) is a tool that implements Microsoft's
+  Language Server Protocol for Zig in Zig. In simpler terms: it'll provide you with
+  completions, go-to definition, etc. when you write Zig code!
+url: https://github.com/zigtools/zls
+dependencies: []
+languages:
+  - Zig
+recipe:
+  kind: git_release
+  repository: zigtools/zls
+  binary_name: zls
+  binary_inner_path: bin/zls
+  package: |
+     zls-{{.Arch}}-{{.OS}}.tar.gz 
+  context_replaces:
+    OS:
+      darwin: macos
+    Arch:
+      arm64: aarch64
+      amd64: x86_64
+      '386': x86

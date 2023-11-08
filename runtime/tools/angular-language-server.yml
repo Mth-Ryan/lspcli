@@ -1,0 +1,15 @@
+id: angular-language-server
+kind: lsp
+name: Angular language server
+description: |
+  This package contains the Language Server Protocol (LSP)
+  implementation of the Angular Language Service.
+url: https://github.com/angular/vscode-ng-language-service
+dependencies:
+  - Node.js
+  - npm
+languages:
+  - HTML
+recipe:
+  kind: npm
+  package: '@angular/language-server'

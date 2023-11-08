@@ -1,0 +1,16 @@
+id: pyright
+kind: lsp
+name: Pyright
+description: |
+  Pyright is a full-featured, standards-based static type checker for Python. 
+  It is designed for high performance and can be used with large Python source bases.
+url: https://github.com/microsoft/pyright
+dependencies:
+  - Node.js
+  - npm
+  - Python3
+languages:
+  - Python
+recipe:
+  kind: npm
+  package: pyright

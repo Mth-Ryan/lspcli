@@ -5,7 +5,7 @@ description: |
   Language Server Protocol implementation for TypeScript wrapping tsserver.
 url: https://github.com/typescript-language-server/typescript-language-server
 dependencies:
-  - nodejs
+  - Node.js
   - npm
 languages:
   - Typescript
