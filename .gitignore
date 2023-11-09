@@ -26,6 +26,7 @@ bin/
 # runtime installs
 
 runtime/*
+!runtime/env.*
 !runtime/tools
 !runtime/bin/.gitkeep
 !runtime/installs/.gitkeep
